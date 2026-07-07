@@ -9,21 +9,21 @@ package restaurant;
  * @author Administrator
  */
 public class Menuc {
-    private int Id;
+    private int ID;
     private String Item;
     private String Category;
     private float Price;
     private String Status;
     
-  public Menuc(int Id,String Item ,String Category,float Price,String Status){
-      this.Id=Id;
+  public Menuc(int ID,String Item ,String Category,float Price,String Status){
+      this.ID=ID;
       this.Item=Item;
       this.Category=Category;
       this.Price=Price;
       this.Status=Status;
        }
-  public int getId(){
-      return Id;
+  public int getID(){
+      return ID;
   }
   public String getItem(){
       return Item;

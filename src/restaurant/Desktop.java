@@ -216,12 +216,12 @@ public class Desktop extends javax.swing.JFrame {
 
     private void TablesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablesMouseClicked
         // TODO add your handling code here:
-        replace(new Tables());
+        replace(new JStable());
     }//GEN-LAST:event_TablesMouseClicked
 
     private void OrdersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_OrdersMouseClicked
         // TODO add your handling code here:
-        replace(new Order());
+        replace(new Orders());
     }//GEN-LAST:event_OrdersMouseClicked
 
     private void BillingMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BillingMouseClicked
@@ -241,6 +241,7 @@ public class Desktop extends javax.swing.JFrame {
 
     private void LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseClicked
         // TODO add your handling code here:
+        replace(new Logout());
     }//GEN-LAST:event_LogoutMouseClicked
 public void replace(JPanel panel){
     panel.setSize(content.getSize());

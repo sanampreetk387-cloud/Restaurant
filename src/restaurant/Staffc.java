@@ -31,7 +31,7 @@ public class Staffc {
         return Name;
     }
 
-    public int getPhone() {
+public int getPhone() {
         return Phone;
        
     }

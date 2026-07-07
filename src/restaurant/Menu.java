@@ -4,8 +4,12 @@
  */
 package restaurant;
 
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
+
 
 /**
  *
@@ -17,34 +21,45 @@ public class Menu extends javax.swing.JPanel {
      * Creates new form Menu
      */
      private DefaultTableModel model;
-   String columns[]={"Id","Item Name","Category","Price(₹)","Status"};
-      ArrayList<Menuc> menuc = new ArrayList<>();
+   String columns[]={"ID","Item Name","Category","Price(₹)","Status"};
+      
 
     public Menu() {
         initComponents();
+        new CreateTable();
+       
         model = new DefaultTableModel(columns,0);
          Mtable.setModel(model);
-        menuc.add(new Menuc(1,"Veg Burger","Snacks",120,"Active"));
-            menuc.add(new Menuc(2,"Pizza","Pizza",220,"Active"));
-          //     menuc.add(new Menuc(3,"Cold Coffee","Drinks",150,"Active"));
-           //       menuc.add(new Menuc(4,"Masala Dosa","South",140,"Active"));
+         
                 loadTable();
-    }
-public void loadTable() {
+    }public void loadTable() {
 
         model.setRowCount(0);
 
-       for (Menuc s: menuc) {
+        try {
+            Connection con = DBConnection.getConnection();
+            Statement st = con.createStatement();
+            ResultSet rs = st.executeQuery("SELECT ID, Item, Category,Price,Status FROM Menu ORDER BY ID");
 
-            model.addRow(new Object[]{
-                s.getId(),
-                s.getItem(),
-                s.getCategory(),
-               s.getPrice(),
-                s.getStatus()
-            });
+            while (rs.next()) {
+                model.addRow(new Object[]{
+                    rs.getInt("ID"),
+                    rs.getString("Item"),
+                    rs.getString("Category"),
+                    rs.getInt("Price"),
+                    rs.getString("Status")
+                });
+            }
+
+            rs.close();
+            st.close();
+            con.close();
+
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error loading data: " + e.getMessage());
         }
-        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,20 +76,21 @@ public void loadTable() {
         jLabel3 = new javax.swing.JLabel();
         Item = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        Category = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         Price = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
-        Status = new javax.swing.JTextField();
         Add = new javax.swing.JButton();
         Update = new javax.swing.JButton();
         Delete = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        Id = new javax.swing.JTextField();
+        ID = new javax.swing.JTextField();
+        Status = new javax.swing.JComboBox<>();
+        Category = new javax.swing.JComboBox<>();
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Emoji", 1, 18)); // NOI18N
         jLabel1.setText("Restaurant JS-Menu");
 
+        Mtable.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         Mtable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -86,6 +102,11 @@ public void loadTable() {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        Mtable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                MtableMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(Mtable);
 
         jLabel3.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
@@ -119,7 +140,12 @@ public void loadTable() {
         Delete.addActionListener(this::DeleteActionPerformed);
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
-        jLabel2.setText("Id:");
+        jLabel2.setText("ID:");
+
+        Status.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        Status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
+
+        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "🍕Pizza", "🍔Burger", "🍟Snacks", "🍝Pasta", "🍰Desserts", "☕Beverages", "🍹Drinks" }));
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -127,21 +153,20 @@ public void loadTable() {
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addGroup(panel1Layout.createSequentialGroup()
-                            .addComponent(jLabel6)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Status))
-                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panel1Layout.createSequentialGroup()
-                            .addComponent(jLabel4)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, 208, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addGap(18, 18, 18)
+                        .addComponent(Status, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jLabel2)
                         .addGap(32, 32, 32)
-                        .addComponent(Id, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -167,14 +192,14 @@ public void loadTable() {
                     .addComponent(jLabel3)
                     .addComponent(Item, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(Id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(ID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel5)
-                        .addComponent(Price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(Price, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(Category, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
@@ -184,7 +209,7 @@ public void loadTable() {
                     .addComponent(Add)
                     .addComponent(Update)
                     .addComponent(Delete))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -213,21 +238,36 @@ public void loadTable() {
     private void AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddActionPerformed
         // TODO add your handling code here:
           try {
-         int id=Integer.parseInt(Id.getText());
-            String item = Item.getText();
-            String category=Category.getText();
-            int price = Integer.parseInt(Price.getText());
-            String status=Status.getText();
-            menuc.add(new Menuc(id,item,category ,price,status));
+         int id=Integer.parseInt(ID.getText().trim());
+            String item = Item.getText().trim();
+            String category=Category.getSelectedItem().toString().trim();
+            int price = Integer.parseInt(Price.getText().trim());
+            String status=Status.getSelectedItem().toString().trim();
+          if (item.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Item cannot be empty.");
+                return;
+            }
+           Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                "INSERT INTO Menu(ID, Item, Category,Price, Status) VALUES (?, ?, ?,?,?)");
+            ps.setInt(1, id);
+            ps.setString(2, item);
+            ps.setString(3,category);
+            ps.setInt(4, price);
+             ps.setString(5, status);
+             
+            ps.executeUpdate();
+            ps.close();
+            con.close();
 
             loadTable();
 
             clearFields();
 
-        } catch (Exception e) {
+        }catch (Exception e) {
 
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please enter valid data.");
+                    "Error adding record: " + e.getMessage());
 
         }
     }//GEN-LAST:event_AddActionPerformed
@@ -244,21 +284,40 @@ public void loadTable() {
             return;
         }
          try {
-         int id=Integer.parseInt(Id.getText());
-            String item = Item.getText();
-            String category=Category.getText();
-            int price = Integer.parseInt(Price.getText());
-            String status=Status.getText();
-            menuc.add(new Menuc(id,item,category ,price,status));
+         int id=Integer.parseInt(ID.getText().trim());
+            String item = Item.getText().trim();
+            String category=Category.getSelectedItem().toString().trim();
+            int price = Integer.parseInt(Price.getText().trim());
+            String status=Status.getSelectedItem().toString().trim();
+             if (item.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Item cannot be empty.");
+                return;
+            }
+            int selectedID = (int) model.getValueAt(row, 0);
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                "UPDATE Menu SET ID = ?, Item = ?, Category= ?,Price=?,Status=? WHERE ID = ?");
+            ps.setInt(1, id);
+            ps.setString(2, item);
+            ps.setString(3,category);
+            ps.setInt(4, price);
+            ps.setString(5, status);
+            ps.setInt(6,selectedID);
+            int rows = ps.executeUpdate();
+            ps.close();
+            con.close();
 
-            loadTable();
-
-            clearFields();
+            if (rows == 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "No record found to update.");
+            } else {
+                loadTable();
+                clearFields();
+            }
 
         } catch (Exception e) {
 
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Please enter valid data.");
+                    "Error updating record: " + e.getMessage());
 
         }
     }//GEN-LAST:event_UpdateActionPerformed
@@ -275,30 +334,76 @@ public void loadTable() {
             return;
         }
 
-        menuc.remove(row);
+        int confirm = javax.swing.JOptionPane.showConfirmDialog(this,
+                "Are you sure you want to delete this record?",
+                "Confirm Delete", javax.swing.JOptionPane.YES_NO_OPTION);
 
+        if (confirm != javax.swing.JOptionPane.YES_OPTION) {
+            return;
+        }
+
+        try {
+
+            // Use the roll_no of the selected row to identify the record
+            int selectedID = (int) model.getValueAt(row, 0);
+
+            Connection con = DBConnection.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                "DELETE FROM Menu WHERE ID = ?");
+            ps.setInt(1, selectedID);
+            ps.executeUpdate();
         loadTable();
 
         clearFields();
+    }                                      
+catch (Exception e) {
+
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Error deleting record: " + e.getMessage());
+
+        } 
     }//GEN-LAST:event_DeleteActionPerformed
+
+    private void MtableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_MtableMouseClicked
+        // TODO add your handling code here:
+         int row = Mtable.getSelectedRow();
+
+        if (row == -1) {
+
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "Select a row first.");
+
+            return;
+        }
+          int selectedID = (int) model.getValueAt(row, 0);
+        ID.setText(String.valueOf(selectedID));
+        String item = (String) model.getValueAt(row, 1);
+        Item.setText(item);
+         String category = (String) model.getValueAt(row, 2);
+     Category.setSelectedItem(category);
+        int price= (int) model.getValueAt(row, 3);
+        Price.setText(String.valueOf(price));
+        String status= (String) model.getValueAt(row, 4);
+        Status.setSelectedItem(status);
+    }//GEN-LAST:event_MtableMouseClicked
 public void clearFields() {
-        Id.setText("");
+        ID.setText("");
         Item.setText("");
-        Category.setText("");
+        
         Price.setText("");
-        Status.setText("");
+       
 
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Add;
-    private javax.swing.JTextField Category;
+    private javax.swing.JComboBox<String> Category;
     private javax.swing.JButton Delete;
-    private javax.swing.JTextField Id;
+    private javax.swing.JTextField ID;
     private javax.swing.JTextField Item;
     private javax.swing.JTable Mtable;
     private javax.swing.JTextField Price;
-    private javax.swing.JTextField Status;
+    private javax.swing.JComboBox<String> Status;
     private javax.swing.JButton Update;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

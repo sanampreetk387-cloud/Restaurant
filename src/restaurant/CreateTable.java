@@ -14,8 +14,10 @@ public class CreateTable {
     public CreateTable() {
 
         createMenuTable();
-       createTablesTable();
+       createJStableTable();
        createStaffTable();
+        createBillingTable();
+        createOrdersTable();
 
     }
     
@@ -29,8 +31,7 @@ public class CreateTable {
 
             String sql = "CREATE TABLE IF NOT EXISTS Menu("
                     + "Id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                     
-                    + "Item TEXT,"
+                      + "Item TEXT,"
                     + "Category TEXT,"
                     +"Price INTEGER,"
                     +"Status TEXT"
@@ -78,7 +79,7 @@ public void createStaffTable() {
         }
         
 }
-public void createTablesTable() {
+public void createJStableTable() {
         
          try {
 
@@ -86,7 +87,7 @@ public void createTablesTable() {
 
             Statement st = con.createStatement();
 
-            String sql = "CREATE TABLE IF NOT EXISTS Tables("
+            String sql = "CREATE TABLE IF NOT EXISTS JStable("
                     + "Id INTEGER PRIMARY KEY AUTOINCREMENT,"
                      
                     + "Tableno INTEGER,"
@@ -105,7 +106,57 @@ public void createTablesTable() {
         } catch (Exception e) {
             System.out.println(e);
         }
-        
+    }
+public void createBillingTable(){
+    try{
+         Connection con = DBConnection.getConnection();
+
+            Statement st = con.createStatement();
+            String sql="CREATE TABLE IF NOT EXISTS Billing("
+                +"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    +"Quantity INTEGER,"
+                    +"Price INTEGER,"
+                    +"Total INTEGER"
+                   
+                    
+                    
+                    +")";
+        st.executeUpdate(sql);
+
+            System.out.println("Table Created Successfully");
+
+            st.close();
+            con.close();
+
+    
+    }
+ catch(Exception e){
+    System.out.println(e);
+}
+}
+public void createOrdersTable(){
+    try{
+         Connection con = DBConnection.getConnection();
+
+            Statement st = con.createStatement();
+            String sql="CREATE TABLE IF NOT EXISTS Orders("
+                +"ID INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    +"Tableno INTEGER,"
+                    +"Item INTEGER"
+                    
+                   +")";
+        st.executeUpdate(sql);
+
+            System.out.println("Table Created Successfully");
+
+            st.close();
+            con.close();
+
+    
+    }
+ catch(Exception e){
+    System.out.println(e);
+ }
 }
 }
 
