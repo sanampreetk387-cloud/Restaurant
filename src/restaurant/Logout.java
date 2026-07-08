@@ -109,11 +109,18 @@ public class Logout extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void LogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogoutActionPerformed
-        // TODO add your handling code here:
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (win != null) {
+            win.dispose();
+        }
+        new Login().setVisible(true);
     }//GEN-LAST:event_LogoutActionPerformed
 
     private void CancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CancelActionPerformed
-        // TODO add your handling code here:
+        java.awt.Window win = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (win instanceof Desktop) {
+            ((Desktop) win).replace(new Dashboard());
+        }
     }//GEN-LAST:event_CancelActionPerformed
 
 
