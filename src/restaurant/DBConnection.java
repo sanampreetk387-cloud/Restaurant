@@ -23,10 +23,11 @@ public class DBConnection {
 
         try {
 
+            Class.forName("org.sqlite.JDBC");
             con = DriverManager.getConnection(URL);
             System.out.println("Database Connected Successfully!");
 
-        } catch (SQLException e) {
+        } catch (Exception e) {
 
             System.out.println("Connection Error: " + e.getMessage());
 

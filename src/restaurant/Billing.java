@@ -29,6 +29,7 @@ public class Billing extends javax.swing.JPanel {
          Btable.setModel(model);
          
                 loadTable();
+                setupTwoPanelLayout();
     }public void loadTable() {
 
         model.setRowCount(0);
@@ -257,32 +258,28 @@ public class Billing extends javax.swing.JPanel {
 
     private void SaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveActionPerformed
         // TODO add your handling code here:
-         try {
-         int id=Integer.parseInt(ID.getText().trim());
-         int quantity=Integer.parseInt(Quantity.getText().trim());
-          int total=Integer.parseInt(Total.getText().trim());
-          String payment=Payment.getSelectedItem().toString().trim();
+          try {
+            int quantity=Integer.parseInt(Quantity.getText().trim());
             int price=Integer.parseInt(Price.getText().trim());
-          Connection con = DBConnection.getConnection();
+            int total = quantity * price;
+            Total.setText(String.valueOf(total));
+            String payment=Payment.getSelectedItem().toString().trim();
+            Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO Billing(ID, Quantity,Price,  Total) VALUES (?,?,?,?)");
-            ps.setInt(1, id);
-           ps.setInt(2, quantity);
-          ps.setInt(3, price);
-            ps.setInt(4, total);
-         
-              
-           ps.executeUpdate();
+                "INSERT INTO Billing(Quantity,Price,Total) VALUES (?,?,?)");
+            ps.setInt(1, quantity);
+            ps.setInt(2, price);
+            ps.setInt(3, total);
+            ps.executeUpdate();
             ps.close();
             con.close();
 
             loadTable();
-
-           clearFields();
+            clearFields();
        }
        catch(Exception e){
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error updating record: " + e.getMessage());
+                    "Error saving record: " + e.getMessage());
        }
     }//GEN-LAST:event_SaveActionPerformed
 
@@ -333,31 +330,49 @@ catch (Exception e) {
     private void GenerateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GenerateActionPerformed
         // TODO add your handling code here:
         try {
-         int id=Integer.parseInt(ID.getText().trim());
-         int quantity=Integer.parseInt(Quantity.getText().trim());
-          int total=Integer.parseInt(Total.getText().trim());
-          String payment=Payment.getSelectedItem().toString().trim();
+            int quantity=Integer.parseInt(Quantity.getText().trim());
             int price=Integer.parseInt(Price.getText().trim());
-          Connection con = DBConnection.getConnection();
+            int total = quantity * price;
+            Total.setText(String.valueOf(total));
+            String payment=Payment.getSelectedItem().toString().trim();
+            Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO Billing(ID, Quantity,  Price,Total) VALUES (?,?,?,?)");
-            ps.setInt(1, id);
-           ps.setInt(2, quantity);
-          ps.setInt(3, price);
-            ps.setInt(4, total);
-         
+                "INSERT INTO Billing(Quantity,Price,Total) VALUES (?,?,?)",
+                java.sql.Statement.RETURN_GENERATED_KEYS);
+            ps.setInt(1, quantity);
+            ps.setInt(2, price);
+            ps.setInt(3, total);
+            ps.executeUpdate();
             
-           ps.executeUpdate();
+            int generatedId = -1;
+            java.sql.ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                generatedId = rs.getInt(1);
+            }
+            rs.close();
             ps.close();
             con.close();
 
             loadTable();
-
-           clearFields();
+            
+            String receipt = "==================================\n" +
+                             "        RESTAURANT JS BILL        \n" +
+                             "==================================\n" +
+                             "Bill ID        : " + (generatedId != -1 ? generatedId : "Auto") + "\n" +
+                             "Quantity       : " + quantity + "\n" +
+                             "Price per Item : \u20b9" + price + "\n" +
+                             "Total Amount   : \u20b9" + total + "\n" +
+                             "Payment Mode   : " + payment + "\n" +
+                             "==================================\n" +
+                             "   Thank You! Please Visit Again! \n" +
+                             "==================================\n";
+            javax.swing.JOptionPane.showMessageDialog(this, receipt, "Bill Receipt", javax.swing.JOptionPane.INFORMATION_MESSAGE);
+            
+            clearFields();
        }
        catch(Exception e){
             javax.swing.JOptionPane.showMessageDialog(this,
-                    "Error updating record: " + e.getMessage());
+                    "Error generating bill: " + e.getMessage());
        }
     }//GEN-LAST:event_GenerateActionPerformed
 public void clearFields() {
@@ -365,8 +380,26 @@ public void clearFields() {
         Quantity.setText("");
         Price.setText("");
         Total.setText("");
-       
+    }
 
+    private void setupTwoPanelLayout() {
+        this.setLayout(new java.awt.BorderLayout());
+        this.removeAll();
+
+        javax.swing.JPanel topPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        topPanel.setBackground(new java.awt.Color(0, 0, 51));
+        jLabel1.setForeground(java.awt.Color.WHITE);
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        jLabel11.setForeground(java.awt.Color.WHITE);
+        jLabel11.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(jLabel1, java.awt.BorderLayout.WEST);
+        topPanel.add(jLabel11, java.awt.BorderLayout.EAST);
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JSplitPane splitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT, jScrollPane1, content);
+        splitPane.setDividerLocation(500);
+        splitPane.setResizeWeight(0.6);
+        this.add(splitPane, java.awt.BorderLayout.CENTER);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

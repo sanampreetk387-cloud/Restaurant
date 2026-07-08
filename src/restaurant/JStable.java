@@ -30,6 +30,7 @@ public class JStable extends javax.swing.JPanel {
          Ttable.setModel(model);
          
                 loadTable();
+                setupTwoPanelLayout();
     }
 public void loadTable() {
 
@@ -43,9 +44,8 @@ public void loadTable() {
             while (rs.next()) {
                 model.addRow(new Object[]{
                     rs.getInt("Tableno"),
-                    rs.getString("Customer"),
-                   
                     rs.getInt("Capacity"),
+                    rs.getString("Customer"),
                     rs.getString("Status")
                 });
             }
@@ -381,6 +381,23 @@ public void clearFields() {
         Customer.setText("");
        
 
+    }
+
+    private void setupTwoPanelLayout() {
+        this.setLayout(new java.awt.BorderLayout());
+        this.removeAll();
+
+        javax.swing.JPanel topPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        topPanel.setBackground(new java.awt.Color(0, 0, 51));
+        jLabel1.setForeground(java.awt.Color.WHITE);
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(jLabel1, java.awt.BorderLayout.WEST);
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JSplitPane splitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT, jScrollPane1, panel1);
+        splitPane.setDividerLocation(500);
+        splitPane.setResizeWeight(0.6);
+        this.add(splitPane, java.awt.BorderLayout.CENTER);
     }
 
 

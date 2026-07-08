@@ -198,11 +198,19 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_registerMouseClicked
 
     private void passwordRMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_passwordRMouseClicked
-        // TODO add your handling code here:
+        jTextField2.setText("");
+        jTextField3.setText("");
     }//GEN-LAST:event_passwordRMouseClicked
 
     private void loginuMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginuMouseClicked
-        // TODO add your handling code here:
+        String username = jTextField2.getText().trim();
+        String password = jTextField3.getText().trim();
+        if (username.equals("admin") && password.equals("admin")) {
+            this.dispose();
+            java.awt.EventQueue.invokeLater(() -> new Desktop().setVisible(true));
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Invalid Username or Password", "Login Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_loginuMouseClicked
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed

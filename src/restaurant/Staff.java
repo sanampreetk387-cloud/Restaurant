@@ -29,6 +29,7 @@ public class Staff extends javax.swing.JPanel {
         Stable.setModel(model);
         
         loadTable();
+        setupTwoPanelLayout();
     }
      public void loadTable() {
 
@@ -43,7 +44,7 @@ public class Staff extends javax.swing.JPanel {
                 model.addRow(new Object[]{
                     rs.getInt("ID"),
                     rs.getString("Name"),
-                    rs.getInt("Phone"),
+                    rs.getLong("Phone"),
                     rs.getString("Role"),
                     rs.getInt("Salary")
                 });
@@ -236,10 +237,9 @@ public class Staff extends javax.swing.JPanel {
     private void AddstaffActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddstaffActionPerformed
         // TODO add your handling code here:
         try {
-         int id=Integer.parseInt(ID.getText().trim());
             String name = Name.getText().trim();
-            int phone  = Integer.parseInt(Phone.getText().trim());
-          String role=Role.getSelectedItem().toString().trim();
+            long phone  = Long.parseLong(Phone.getText().trim());
+            String role=Role.getSelectedItem().toString().trim();
             int salary = Integer.parseInt(Salary.getText().trim());
              
             if (name.isEmpty()) {
@@ -249,12 +249,11 @@ public class Staff extends javax.swing.JPanel {
 
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO Staff (ID, Name, Phone,Role,Salary) VALUES (?, ?, ?,?,?)");
-            ps.setInt(1, id);
-            ps.setString(2, name);
-            ps.setInt(3, phone);
-             ps.setString(4, role);
-              ps.setInt(5, salary);
+                "INSERT INTO Staff (Name, Phone, Role, Salary) VALUES (?, ?, ?, ?)");
+            ps.setString(1, name);
+            ps.setLong(2, phone);
+            ps.setString(3, role);
+            ps.setInt(4, salary);
             ps.executeUpdate();
             ps.close();
             con.close();
@@ -326,11 +325,10 @@ catch (Exception e) {
 
             return;
         }
-         try {
-         int id=Integer.parseInt(ID.getText().trim());
+          try {
             String name = Name.getText().trim();
-            int phone  = Integer.parseInt(Phone.getText().trim());
-          String role=Role.getSelectedItem().toString().trim();
+            long phone  = Long.parseLong(Phone.getText().trim());
+            String role=Role.getSelectedItem().toString().trim();
             int salary = Integer.parseInt(Salary.getText().trim());
              
             if (name.isEmpty()) {
@@ -341,13 +339,12 @@ catch (Exception e) {
            int selectedID = (int) model.getValueAt(row, 0);
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "UPDATE Staff SET ID = ?, Name= ?, Phone= ?,Role=?,Salary=? WHERE ID = ?");
-            ps.setInt(1, id);
-            ps.setString(2, name);
-            ps.setInt(3, phone);
-             ps.setString(4, role);
-              ps.setInt(5, salary);
-            ps.setInt(6,selectedID);
+                "UPDATE Staff SET Name= ?, Phone= ?,Role=?,Salary=? WHERE ID = ?");
+            ps.setString(1, name);
+            ps.setLong(2, phone);
+             ps.setString(3, role);
+              ps.setInt(4, salary);
+            ps.setInt(5,selectedID);
             int rows = ps.executeUpdate();
             ps.close();
             con.close();
@@ -369,7 +366,7 @@ catch (Exception e) {
     private void StableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StableMouseClicked
         // TODO add your handling code here:
         
-         int row = Stable.getSelectedRow();
+          int row = Stable.getSelectedRow();
 
         if (row == -1) {
 
@@ -379,15 +376,15 @@ catch (Exception e) {
             return;
         }
         
-        int selectedID = (int) model.getValueAt(row, 0);
+        Object selectedID = model.getValueAt(row, 0);
         ID.setText(String.valueOf(selectedID));
         String name = (String) model.getValueAt(row, 1);
         Name.setText(name);
          String role = (String) model.getValueAt(row, 3);
-     Role.setSelectedItem(role);
-        int phone = (int) model.getValueAt(row, 2);
+      Role.setSelectedItem(role);
+        Object phone = model.getValueAt(row, 2);
         Phone.setText(String.valueOf(phone));
-        int salary= (int) model.getValueAt(row, 4);
+        Object salary= model.getValueAt(row, 4);
         Salary.setText(String.valueOf(salary));
     }//GEN-LAST:event_StableMouseClicked
                                 
@@ -396,8 +393,23 @@ catch (Exception e) {
         Salary.setText("");
         Name.setText("");
         Phone.setText("");
-        
+    }
 
+    private void setupTwoPanelLayout() {
+        this.setLayout(new java.awt.BorderLayout());
+        this.removeAll();
+
+        javax.swing.JPanel topPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        topPanel.setBackground(new java.awt.Color(0, 0, 51));
+        jLabel2.setForeground(java.awt.Color.WHITE);
+        jLabel2.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(jLabel2, java.awt.BorderLayout.WEST);
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JSplitPane splitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT, jScrollPane1, panel1);
+        splitPane.setDividerLocation(500);
+        splitPane.setResizeWeight(0.6);
+        this.add(splitPane, java.awt.BorderLayout.CENTER);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

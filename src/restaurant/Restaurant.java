@@ -16,7 +16,7 @@ public class Restaurant {
     public static void main(String[] args) {
         // TODO code application logic here
       
-        java.awt.EventQueue.invokeLater(() -> new Desktop().setVisible(true));
+        java.awt.EventQueue.invokeLater(() -> new Login().setVisible(true));
         new DBConnection().getConnection();
         new CreateTable();
 

@@ -32,6 +32,7 @@ public class Menu extends javax.swing.JPanel {
          Mtable.setModel(model);
          
                 loadTable();
+                setupTwoPanelLayout();
     }public void loadTable() {
 
         model.setRowCount(0);
@@ -145,7 +146,7 @@ public class Menu extends javax.swing.JPanel {
         Status.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Status.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Active", "Inactive" }));
 
-        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "🍕Pizza", "🍔Burger", "🍟Snacks", "🍝Pasta", "🍰Desserts", "☕Beverages", "🍹Drinks" }));
+        Category.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "\uD83C\uDF55Pizza", "\uD83C\uDF54Burger", "\uD83C\uDF5FSnacks", "\uD83C\uDF5DPasta", "\uD83C\uDF70Desserts", "\u2615Beverages", "\uD83C\uDF79Drinks" }));
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -238,23 +239,21 @@ public class Menu extends javax.swing.JPanel {
     private void AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddActionPerformed
         // TODO add your handling code here:
           try {
-         int id=Integer.parseInt(ID.getText().trim());
-            String item = Item.getText().trim();
-            String category=Category.getSelectedItem().toString().trim();
-            int price = Integer.parseInt(Price.getText().trim());
-            String status=Status.getSelectedItem().toString().trim();
-          if (item.isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Item cannot be empty.");
-                return;
-            }
-           Connection con = DBConnection.getConnection();
+             String item = Item.getText().trim();
+             String category=Category.getSelectedItem().toString().trim();
+             int price = Integer.parseInt(Price.getText().trim());
+             String status=Status.getSelectedItem().toString().trim();
+           if (item.isEmpty()) {
+                 javax.swing.JOptionPane.showMessageDialog(this, "Item cannot be empty.");
+                 return;
+             }
+            Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO Menu(ID, Item, Category,Price, Status) VALUES (?, ?, ?,?,?)");
-            ps.setInt(1, id);
-            ps.setString(2, item);
-            ps.setString(3,category);
-            ps.setInt(4, price);
-             ps.setString(5, status);
+                "INSERT INTO Menu(Item, Category,Price, Status) VALUES (?, ?,?,?)");
+            ps.setString(1, item);
+            ps.setString(2,category);
+            ps.setInt(3, price);
+             ps.setString(4, status);
              
             ps.executeUpdate();
             ps.close();
@@ -284,25 +283,23 @@ public class Menu extends javax.swing.JPanel {
             return;
         }
          try {
-         int id=Integer.parseInt(ID.getText().trim());
-            String item = Item.getText().trim();
-            String category=Category.getSelectedItem().toString().trim();
-            int price = Integer.parseInt(Price.getText().trim());
-            String status=Status.getSelectedItem().toString().trim();
-             if (item.isEmpty()) {
+             String item = Item.getText().trim();
+             String category=Category.getSelectedItem().toString().trim();
+             int price = Integer.parseInt(Price.getText().trim());
+             String status=Status.getSelectedItem().toString().trim();
+              if (item.isEmpty()) {
                 javax.swing.JOptionPane.showMessageDialog(this, "Item cannot be empty.");
                 return;
             }
             int selectedID = (int) model.getValueAt(row, 0);
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "UPDATE Menu SET ID = ?, Item = ?, Category= ?,Price=?,Status=? WHERE ID = ?");
-            ps.setInt(1, id);
-            ps.setString(2, item);
-            ps.setString(3,category);
-            ps.setInt(4, price);
-            ps.setString(5, status);
-            ps.setInt(6,selectedID);
+                "UPDATE Menu SET Item = ?, Category= ?,Price=?,Status=? WHERE ID = ?");
+            ps.setString(1, item);
+            ps.setString(2,category);
+            ps.setInt(3, price);
+            ps.setString(4, status);
+            ps.setInt(5,selectedID);
             int rows = ps.executeUpdate();
             ps.close();
             con.close();
@@ -375,13 +372,13 @@ catch (Exception e) {
 
             return;
         }
-          int selectedID = (int) model.getValueAt(row, 0);
+          Object selectedID = model.getValueAt(row, 0);
         ID.setText(String.valueOf(selectedID));
         String item = (String) model.getValueAt(row, 1);
         Item.setText(item);
          String category = (String) model.getValueAt(row, 2);
      Category.setSelectedItem(category);
-        int price= (int) model.getValueAt(row, 3);
+        Object price= model.getValueAt(row, 3);
         Price.setText(String.valueOf(price));
         String status= (String) model.getValueAt(row, 4);
         Status.setSelectedItem(status);
@@ -393,6 +390,23 @@ public void clearFields() {
         Price.setText("");
        
 
+    }
+
+    private void setupTwoPanelLayout() {
+        this.setLayout(new java.awt.BorderLayout());
+        this.removeAll();
+
+        javax.swing.JPanel topPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        topPanel.setBackground(new java.awt.Color(0, 0, 51));
+        jLabel1.setForeground(java.awt.Color.WHITE);
+        jLabel1.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(jLabel1, java.awt.BorderLayout.WEST);
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JSplitPane splitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT, jScrollPane1, panel1);
+        splitPane.setDividerLocation(500);
+        splitPane.setResizeWeight(0.6);
+        this.add(splitPane, java.awt.BorderLayout.CENTER);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

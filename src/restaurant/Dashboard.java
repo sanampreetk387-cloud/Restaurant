@@ -154,7 +154,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel11.setForeground(new java.awt.Color(255, 153, 0));
         jLabel11.setText("View-->");
 
-        jLabel12.setText("👝");
+        jLabel12.setText("\uD83D\uDC5C");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -192,7 +192,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel13.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         jLabel13.setText("Menu Items");
 
-        jLabel14.setText("🍽️");
+        jLabel14.setText("\uD83C\uDF7D");
 
         jLabel15.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel15.setForeground(new java.awt.Color(255, 255, 255));
@@ -239,7 +239,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel17.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         jLabel17.setText("Customers");
 
-        jLabel18.setText("👨‍👩‍👧‍👦");
+        jLabel18.setText("\uD83D\uDC68\u200D\uD83D\uDC69\u200D\uD83D\uDC67\u200D\uD83D\uDC66");
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel19.setForeground(new java.awt.Color(255, 255, 255));
@@ -333,7 +333,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel30.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         jLabel30.setText("Preparing ");
 
-        jLabel31.setText("🍴");
+        jLabel31.setText("\uD83C\uDF74");
 
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel32.setForeground(new java.awt.Color(255, 255, 255));
@@ -380,7 +380,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel34.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         jLabel34.setText("Ready to Serve");
 
-        jLabel35.setText("🍱");
+        jLabel35.setText("\uD83C\uDF71");
         jLabel35.setToolTipText("");
 
         jLabel36.setFont(new java.awt.Font("Segoe UI Black", 1, 36)); // NOI18N
@@ -428,7 +428,7 @@ public class Dashboard extends javax.swing.JPanel {
         jLabel22.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         jLabel22.setText("Complete Orders");
 
-        jLabel23.setText("↗️");
+        jLabel23.setText("\u2197\uFE0F");
 
         jLabel24.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel24.setForeground(new java.awt.Color(255, 255, 255));

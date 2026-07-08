@@ -29,6 +29,7 @@ public class Orders extends javax.swing.JPanel {
         Otable.setModel(model);
         
         loadTable();
+        setupTwoPanelLayout();
     }
      public void loadTable() {
 
@@ -241,29 +242,19 @@ catch (Exception e) {
     private void AddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AddActionPerformed
         // TODO add your handling code here:
           try {
-         int id=Integer.parseInt(ID.getText().trim());
-           
             int item  = Integer.parseInt(Item.getText().trim());
-          
             int tableno= Integer.parseInt(Tableno.getText().trim());
-             
-           
 
             Connection con = DBConnection.getConnection();
             PreparedStatement ps = con.prepareStatement(
-                "INSERT INTO Orders (ID, Item,Tableno) VALUES ( ?,?,?)");
-            ps.setInt(1, id);
-         
-            ps.setInt(2, item);
-             
-              ps.setInt(3, tableno);
+                "INSERT INTO Orders (Item,Tableno) VALUES (?,?)");
+            ps.setInt(1, item);
+            ps.setInt(2, tableno);
             ps.executeUpdate();
             ps.close();
             con.close();
 
-
             loadTable();
-
             clearFields();
 
         }  catch (Exception e) {
@@ -286,22 +277,35 @@ catch (Exception e) {
             return;
         }
         
-        int selectedID = (int) model.getValueAt(row, 0);
+        Object selectedID = model.getValueAt(row, 0);
         ID.setText(String.valueOf(selectedID));
-       
-       
-        int item = (int) model.getValueAt(row, 1);
+        Object item = model.getValueAt(row, 1);
         Item.setText(String.valueOf(item));
-        int tableno= (int) model.getValueAt(row, 2);
-       Tableno.setText(String.valueOf(tableno));
+        Object tableno = model.getValueAt(row, 2);
+        Tableno.setText(String.valueOf(tableno));
     }//GEN-LAST:event_OtableMouseClicked
 
 public void clearFields() {
         ID.setText("");
-       Item.setText("");
+        Item.setText("");
         Tableno.setText("");
-        
+    }
 
+    private void setupTwoPanelLayout() {
+        this.setLayout(new java.awt.BorderLayout());
+        this.removeAll();
+
+        javax.swing.JPanel topPanel = new javax.swing.JPanel(new java.awt.BorderLayout());
+        topPanel.setBackground(new java.awt.Color(0, 0, 51));
+        jLabel4.setForeground(java.awt.Color.WHITE);
+        jLabel4.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        topPanel.add(jLabel4, java.awt.BorderLayout.WEST);
+        this.add(topPanel, java.awt.BorderLayout.NORTH);
+
+        javax.swing.JSplitPane splitPane = new javax.swing.JSplitPane(javax.swing.JSplitPane.HORIZONTAL_SPLIT, jScrollPane1, panel1);
+        splitPane.setDividerLocation(500);
+        splitPane.setResizeWeight(0.6);
+        this.add(splitPane, java.awt.BorderLayout.CENTER);
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton Add;
