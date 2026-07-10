@@ -47,10 +47,10 @@ public class Login extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(102, 153, 255));
 
-        jPanel2.setBackground(new java.awt.Color(0, 0, 0));
+        jPanel2.setBackground(new java.awt.Color(0, 0, 51));
         jPanel2.setForeground(new java.awt.Color(255, 255, 255));
 
-        jTextField1.setBackground(new java.awt.Color(153, 153, 153));
+        jTextField1.setBackground(new java.awt.Color(204, 204, 204));
         jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jTextField1.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField1.setText("Login Form");
@@ -63,9 +63,8 @@ public class Login extends javax.swing.JFrame {
         jTextField2.setBackground(new java.awt.Color(204, 204, 204));
         jTextField2.addActionListener(this::jTextField2ActionPerformed);
 
-        loginu.setBackground(new java.awt.Color(102, 102, 102));
+        loginu.setBackground(new java.awt.Color(204, 204, 204));
         loginu.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        loginu.setForeground(new java.awt.Color(255, 255, 255));
         loginu.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         loginu.setText("Login");
         loginu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -81,9 +80,8 @@ public class Login extends javax.swing.JFrame {
 
         jTextField3.setBackground(new java.awt.Color(204, 204, 204));
 
-        passwordR.setBackground(new java.awt.Color(102, 102, 102));
+        passwordR.setBackground(new java.awt.Color(204, 204, 204));
         passwordR.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        passwordR.setForeground(new java.awt.Color(255, 255, 255));
         passwordR.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         passwordR.setText("Reset");
         passwordR.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -92,9 +90,8 @@ public class Login extends javax.swing.JFrame {
             }
         });
 
-        register.setBackground(new java.awt.Color(102, 102, 102));
+        register.setBackground(new java.awt.Color(204, 204, 204));
         register.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        register.setForeground(new java.awt.Color(255, 255, 255));
         register.setText("Register");
         register.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
